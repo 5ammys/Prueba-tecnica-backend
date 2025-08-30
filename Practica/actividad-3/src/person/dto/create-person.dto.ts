@@ -1,6 +1,6 @@
 import {
   IsString,
-  IsDateString,
+  //IsDateString,
   Matches,
   Min,
   Max,
@@ -26,9 +26,19 @@ export class CreatePersonDto {
   name: string;
 
   @IsString()
+  @Transform(({ value }): string =>
+    typeof value === 'string'
+      ? value
+          .toString()
+          .trim()
+          .replace(
+            /\w\S*/g,
+            (txt) => txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase(),
+          )
+      : '',
+  )
   surname: string;
 
-  @IsDateString()
   @Matches(/^\d{4}\/\d{2}\/\d{2}$/, {
     message: 'birthday must be in format YYYY/MM/DD',
   })
@@ -36,7 +46,7 @@ export class CreatePersonDto {
 
   @IsInt()
   @Min(0)
-  @Max(150)
+  @Max(140)
   age: number;
 
   @IsString()

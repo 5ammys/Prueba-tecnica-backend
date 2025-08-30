@@ -1,5 +1,11 @@
 // src/person/person.controller.ts
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  BadRequestException,
+  Get,
+} from '@nestjs/common';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { PersonService } from './person.service';
 
@@ -19,5 +25,10 @@ export class PersonController {
     }
 
     return this.personService.sendToFirebase(createPersonDto);
+  }
+
+  @Get()
+  async getPersons(): Promise<any> {
+    return this.personService.getAllPersons();
   }
 }
