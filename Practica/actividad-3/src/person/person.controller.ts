@@ -1,0 +1,23 @@
+// src/person/person.controller.ts
+import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import { CreatePersonDto } from './dto/create-person.dto';
+import { PersonService } from './person.service';
+
+@Controller('person')
+export class PersonController {
+  constructor(private readonly personService: PersonService) {}
+
+  @Post()
+  async createPerson(@Body() createPersonDto: CreatePersonDto): Promise<any> {
+    const birthdayDate = new Date(createPersonDto.birthday);
+    const minDate = new Date('1900-01-01');
+    const maxDate = new Date();
+    if (birthdayDate < minDate || birthdayDate > maxDate) {
+      throw new BadRequestException(
+        'Birthday fuera de rango (1900-01-01 hasta hoy)',
+      );
+    }
+
+    return this.personService.sendToFirebase(createPersonDto);
+  }
+}
