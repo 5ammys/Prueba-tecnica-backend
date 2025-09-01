@@ -8,13 +8,16 @@ import {
 } from '@nestjs/common';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { PersonService } from './person.service';
+import { FirebasePostResponse, Person } from './person.interface';
 
 @Controller('person')
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
 
   @Post()
-  async createPerson(@Body() createPersonDto: CreatePersonDto): Promise<any> {
+  async createPerson(
+    @Body() createPersonDto: CreatePersonDto,
+  ): Promise<FirebasePostResponse> {
     const birthdayDate = new Date(createPersonDto.birthday);
     const minDate = new Date('1900-01-01');
     const maxDate = new Date();
@@ -28,7 +31,7 @@ export class PersonController {
   }
 
   @Get()
-  async getPersons(): Promise<any> {
+  async getPersons(): Promise<Person[]> {
     return this.personService.getAllPersons();
   }
 }
